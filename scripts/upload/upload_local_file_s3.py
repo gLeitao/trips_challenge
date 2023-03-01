@@ -7,6 +7,9 @@ from datetime import datetime
 parser = argparse.ArgumentParser()
 parser.add_argument("--path", required=True)
 args = parser.parse_args()
+
+if not os.path.exists(args.path):
+    raise ValueError(f"The file path does not exist: {args.path}")
     
 session = boto3.Session()
 s3 = session.client('s3', 
@@ -17,5 +20,8 @@ s3 = session.client('s3',
 
 date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-with open(args.path, 'rb') as f:
-    s3.upload_fileobj(f, 'datalake-geovani-igti', f'datetime={date}/trips.csv') 
+try:
+    with open(args.path, 'rb') as f:
+        s3.upload_fileobj(f, 'datalake-geovani-igti', f'datetime={date}/trips.csv') 
+except Exception as e:
+        print("Error uploading file to S3: {}".format(str(e)))        
