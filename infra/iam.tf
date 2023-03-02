@@ -113,3 +113,54 @@ resource "aws_iam_role_policy_attachment" "glue_attach" {
   role       = aws_iam_role.glue_role.name
   policy_arn = aws_iam_policy.glue_policy.arn
 }
+
+
+resource "aws_iam_role" "trips_step_function_role" {
+  name = "trips_step_function_role"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "states.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "trips_step_function_policy" {
+  name        = "trips_step_function_policy" 
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "glue:StartJobRun",
+                "glue:GetJobRun",
+                "glue:GetJobRuns",
+                "glue:BatchStopJobRun",
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+                "xray:GetSamplingRules",
+                "xray:GetSamplingTargets"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "trips_step_function_attach" {
+  role       = aws_iam_role.trips_step_function_role.name
+  policy_arn = aws_iam_policy.trips_step_function_policy.arn
+}
