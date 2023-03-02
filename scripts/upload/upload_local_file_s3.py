@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 from datetime import datetime
+import json 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--path", required=True)
@@ -18,7 +19,7 @@ s3 = session.client('s3',
                     aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
                     aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
-date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+date = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
 
 try:
     with open(args.path, 'rb') as f:
@@ -27,7 +28,13 @@ except Exception as e:
         print("Error uploading file to S3: {}".format(str(e)))   
 
 
-client = boto3.client('glue')
+client = boto3.client('stepfunctions')
 
-client.start_job_run(JobName = 'raw_job',
-                     Arguments = { '--datetime':  date} )
+data = {'datetime': date}
+
+client.start_execution(
+    stateMachineArn='arn:aws:states:us-east-2:021380080893:stateMachine:trips-load-datapipeline',
+    name=f'trips-load-datapipeline-{str(hash(date))}',
+    input=json.dumps(data),
+    traceHeader=''
+)
