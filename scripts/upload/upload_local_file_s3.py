@@ -22,6 +22,12 @@ date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 try:
     with open(args.path, 'rb') as f:
-        s3.upload_fileobj(f, 'datalake-geovani-igti', f'datetime={date}/trips.csv') 
+        s3.upload_fileobj(f, 'trips-datalake', f'landing/trips/datetime={date}/trips.csv') 
 except Exception as e:
-        print("Error uploading file to S3: {}".format(str(e)))        
+        print("Error uploading file to S3: {}".format(str(e)))   
+
+
+client = boto3.client('glue')
+
+client.start_job_run(JobName = 'raw_job',
+                     Arguments = { '--datetime':  date} )
