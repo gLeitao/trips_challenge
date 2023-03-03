@@ -2,28 +2,32 @@
 
 This is the Trips Challenge project, a solution to a coding challenge provided by Jobsity.
 
+
+
+## Prerequisites
+
 In order to run this project, you will need to have the following installed and configured on your machine:
 
 
-## Terraform
+### Terraform
 Terraform is an infrastructure as code tool used to create the AWS architecture. To install it, please follow the instructions from the official website:
  - https://www.terraform.io/downloads.html
 
-## AWS CLI
+### AWS CLI
 
 The AWS CLI is a command-line tool that allows you to interact with AWS services. To install it, please follow the instructions from the official website:
 insta
-## Environment Variables
+### Environment Variables
 
 You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
 - https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
 
-## Python
+### Python
 
 You will need Python 3.7 or higher installed on your machine. You can download it from the official website:
 - https://www.python.org/downloads/
 
-## Python Libraries
+### Python Libraries
 
 You will also need to install the following Python libraries:
 
