@@ -13,7 +13,8 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "Parameters": {
         "JobName": "raw_job",
         "Arguments": {
-          "--datetime.$": "$.datetime"
+          "--datetime.$": "$.datetime",
+          "--hashid.$": "$.hashid"
         }
       },
       "Next": "Parallel",
@@ -31,7 +32,8 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
               "Parameters": {
                 "JobName": "dimregions_job",
                 "Arguments": {
-                  "--datetime.$": "$.datetime"
+                  "--datetime.$": "$.datetime",
+                  "--hashid.$": "$.hashid"
                 }
               },
               "End": true
@@ -47,7 +49,8 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
               "Parameters": {
                 "JobName": "dimdatasources_job",
                 "Arguments": {
-                  "--datetime.$": "$.datetime"
+                  "--datetime.$": "$.datetime",
+                  "--hashid.$": "$.hashid"
                 }
               },
               "End": true
@@ -64,7 +67,8 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "Parameters": {
         "JobName": "facttrips_job",
         "Arguments": {
-          "--datetime.$": "$.datetime"
+          "--datetime.$": "$.datetime",
+          "--hashid.$": "$.hashid"
         }
       },
       "End": true
