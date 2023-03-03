@@ -59,7 +59,9 @@ python upload_local_file_s3.py --path /path/file.csv
 ```
 `Remeber to replace /path/file.csv with the path to your CSV file. ` 
 
-This will start the Step Function and run the ETL process uploading CSV to S3, than extract data from the S3 bucket, transform it, and load it into a Redshift Cluster. 
+This process will upload the CSV to S3 and invoke the Step Function, the workflow orchestrator responsible for triggering the ETLs that process the data.
+
+![plot](./img/pstepfunctionlot.png)
 
 ## Authors
 - Geovani Leitão - gLeitao
