@@ -61,7 +61,7 @@ python upload_local_file_s3.py --path /path/file.csv
 
 This process will upload the CSV to S3 and invoke the Step Function, the workflow orchestrator responsible for triggering the ETLs that process the data.
 
-![plot](/img/pstepfunctionlot.png)
+![plot](img/stepfunction.png)
 
 ## Authors
 - Geovani Leitão - gLeitao
