@@ -12,11 +12,10 @@ Terraform is an infrastructure as code tool used to create the AWS architecture.
 ## AWS CLI
 
 The AWS CLI is a command-line tool that allows you to interact with AWS services. To install it, please follow the instructions from the official website:
- - https://aws.amazon.com/cli/
-
+insta
 ## Environment Variables
 
-You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY ` as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
+You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
 - https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
 
 ## Python
@@ -28,13 +27,16 @@ You will need Python 3.7 or higher installed on your machine. You can download i
 
 You will also need to install the following Python libraries:
 
-- boto3==1.26.81
-- botocore==1.29.81
-- jmespath==1.0.1
-- python-dateutil==2.8.2
-- s3transfer==0.6.0
-- six==1.16.0
-- urllib3==1.26.14
+```
+pip install \
+    boto3==1.26.81 \
+    botocore==1.29.81 \
+    jmespath==1.0.1 \
+    python-dateutil==2.8.2 \
+    s3transfer==0.6.0 \
+    six==1.16.0 \
+    urllib3==1.26.14
+```
 
 ## Running the AWS Infrastructure
 
