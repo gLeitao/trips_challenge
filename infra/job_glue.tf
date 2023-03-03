@@ -8,6 +8,8 @@ resource "aws_glue_job" "raw_job" {
   execution_class = "STANDARD"
   max_retries = "1"
 
+  connections = [aws_glue_connection.glue_redsfhit_connection.name]
+
   command {
     name = "glueetl"
     script_location = "s3://${aws_s3_bucket.s3_glue_job_bucket.id}/scripts/glue/move_raw.py"
@@ -47,6 +49,8 @@ resource "aws_glue_job" "dimregions_job" {
   timeout = 2880
   execution_class = "STANDARD"
   max_retries = "1"
+
+  connections = [aws_glue_connection.glue_redsfhit_connection.name]
   
   command {
     name = "glueetl"
@@ -87,6 +91,8 @@ resource "aws_glue_job" "dimdatasources_job" {
   timeout = 2880
   execution_class = "STANDARD"
   max_retries = "1"
+
+  connections = [aws_glue_connection.glue_redsfhit_connection.name]
   
   command {
     name = "glueetl"
@@ -126,6 +132,8 @@ resource "aws_glue_job" "facttrips_job" {
   timeout = 2880
   execution_class = "STANDARD"
   max_retries = "1"
+
+  connections = [aws_glue_connection.glue_redsfhit_connection.name]
   
   command {
     name = "glueetl"

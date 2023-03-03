@@ -47,7 +47,8 @@ resource "aws_iam_policy" "glue_policy" {
                 "iam:ListRolePolicies",
                 "iam:GetRole",
                 "iam:GetRolePolicy",
-                "cloudwatch:PutMetricData"
+                "cloudwatch:PutMetricData",
+                "secretsmanager:GetSecretValue"
             ],
             "Resource": [
                 "*"
