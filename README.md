@@ -1,71 +1,63 @@
-Trips Challenge Project
+# Trips Challenge Project
 
-This is the Trips Challenge project, a solution to a coding challenge provided by Trips.
+This is the Trips Challenge project, a solution to a coding challenge provided by Jobsity.
 
 In order to run this project, you will need to have the following installed and configured on your machine:
-Terraform
 
+
+## Terraform
 Terraform is an infrastructure as code tool used to create the AWS architecture. To install it, please follow the instructions from the official website:
+ - https://www.terraform.io/downloads.html
 
-https://www.terraform.io/downloads.html
-AWS CLI
+## AWS CLI
 
 The AWS CLI is a command-line tool that allows you to interact with AWS services. To install it, please follow the instructions from the official website:
+ - https://aws.amazon.com/cli/
 
-https://aws.amazon.com/cli/
-AWS Access Key ID and Secret Access Key
+## Environment Variables
 
-You will need to set your AWS access key ID and secret access key as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
+You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY ` as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
+- https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
 
-https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
-Python
+## Python
 
 You will need Python 3.7 or higher installed on your machine. You can download it from the official website:
+- https://www.python.org/downloads/
 
-https://www.python.org/downloads/
-Python Libraries
+## Python Libraries
 
 You will also need to install the following Python libraries:
 
-makefile
+- boto3==1.26.81
+- botocore==1.29.81
+- jmespath==1.0.1
+- python-dateutil==2.8.2
+- s3transfer==0.6.0
+- six==1.16.0
+- urllib3==1.26.14
 
-boto3==1.26.81
-botocore==1.29.81
-jmespath==1.0.1
-python-dateutil==2.8.2
-s3transfer==0.6.0
-six==1.16.0
-urllib3==1.26.14
-
-You can install them using pip:
-
-pip install -r requirements.txt
-
-Running the AWS Infrastructure
+## Running the AWS Infrastructure
 
 To run the AWS infrastructure, go to the infra folder and run the following commands:
 
-csharp
-
+```terraform
 terraform init
 terraform apply
-
+```
 This will create an the required infra to run this project.
-Running the ETL
 
-To run the ETL process, go to the scripts/glue folder and execute the following command:
+## Running the ETL
+To run the ETL process, go to the scripts/upload folder and execute the following command:
+```
+python upload_local_file_s3.py --path /path/file.csv
+```
+`Remeber to replace /path/file.csv with the path to your CSV file. ` 
 
-python3 upload_local_file_s3.py --path /path/file.csv
+This will start the Step Function and run the ETL process uploading CSV to S3, than extract data from the S3 bucket, transform it, and load it into a Redshift Cluster. 
 
-Replace /path/file.csv with the path to your CSV file.
+## Authors
+- Geovani Leitão - gLeitao
 
-This will start the Step Function and run the ETL process to extract data from the S3 bucket, transform it, and load it into a Redshift Cluster. 
-
-
-Authors
-
-    Geovani Leitão - gLeitao
-
-License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
