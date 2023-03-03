@@ -30,7 +30,7 @@ except Exception as e:
 
 client = boto3.client('stepfunctions')
 
-data = {'datetime': date}
+data = {'datetime': date, 'hashid': str(hash(date))}
 
 client.start_execution(
     stateMachineArn='arn:aws:states:us-east-2:021380080893:stateMachine:trips-load-datapipeline',
@@ -38,3 +38,5 @@ client.start_execution(
     input=json.dumps(data),
     traceHeader=''
 )
+
+print(data)
