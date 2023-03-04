@@ -61,11 +61,31 @@ python upload_local_file_s3.py --path /path/file.csv
 ```
 `Remeber to replace /path/file.csv with the path to your CSV file.` 
 
-This process will upload the CSV to S3 and invoke the Step Function, the workflow orchestrator responsible for triggering the ETLs that process the data.
 
-![plot](img/stepfunction.png)
+## Architecture
 
-## ETL Step by Step
+The architecture is structured as follows: outside the AWS context, there is an application, in this case a Python script, which reads the source CSV file and uploads it to the AWS context, storing it in an S3 bucket in the landing layer. After finishing the upload of the CSV file to the S3 bucket, the application is responsible for triggering the Step Function, which orchestrates the workflow of the pipelines within the AWS context, firing the Glue jobs in the specified sequence in the workflow, which are responsible for reading, manipulating, transforming, and storing the data in the lake or in Redshift. Below you can see the overall project architecture.
+
+
+![plot](img/final_infra.png)
+
+### Workflow
+
+After being triggered, the Step Function triggers a sequence of Glue jobs that follow the order specified in the workflow.
+
+The first stage is the [raw_job](scripts/glue/move_raw.py), which is responsible for reading the CSV file, inferring the schema on the data, and saving it in Parquet format in the landing layer so that the other jobs can consume this information that has been previously treated.
+
+The second stage runs two jobs in parallel and only starts after the successful completion of the [raw_job](scripts/glue/move_raw.py). The jobs that run in this stage are [dimregions_job](scripts/glue/dimregions.py) and [dimdatasources_job](scripts/glue/dimdatasources.py). These jobs read the information from the landing layer, make a distinct on the region and datasource information, respectively, and save it in Delta format. After this transformation occurs successfully, the same job is responsible for inserting the transformed information into their respective tables in Redshift: dimregions and dimdatasources.
+
+Finally, we have the facttrips_job, which only starts after the completion of both [dimregions_job](scripts/glue/dimregions.py) and [dimdatasources_job](scripts/glue/dimdatasources.py). The [facttrips_job](scripts/glue/facttrips.py) reads both dims, reads the information from the landing layer, and transforms the data by joining with the dims and aggregating some information, also saving this data in Delta format. After the transformation is completed, the job also inserts the data into the fattrips table.
+
+It is worth noting that each job is also responsible for feeding the trips_load table in Redshift, informing when the processing started and when it finished. This allows knowing which stage of the workflow it is in without the need to view the Step Function.
+
+Below you can see the overall of Step Function Workflow.
+
+![plot](img/img/stepfunction.png)
+
+## Scope of data
 
 ### Modeling Strategy
 
@@ -76,13 +96,13 @@ In the star schema, one central fact table is connected to a set of dimension ta
 By implementing this modeling strategy, was aimed to ensure that the data is structured in a way that facilitates efficient querying and analysis, and enables us to gain valuable insights from the data.
 
 
-### [Move Raw](scripts/glue/move_raw.py)
+### [Move Raw Job](scripts/glue/move_raw.py)
 
 The Move Raw process reads the CSV file that has been ingested into the data lake and is stored in the landing layer. It then infers the schema of the attributes in the file and converts the data to the Parquet format. Finally, it saves the transformed data in the raw layer of the data lake.
 
 By converting the data to Parquet format, we can take advantage of its columnar storage format, which provides significant performance improvements over traditional row-based formats like CSV. Additionally, by storing the transformed data in the raw layer, we preserve the original data as it was received, enabling us to easily reprocess it if needed
 
-### Dimregions Job
+### [Dimregions Job](scripts/glue/dimregions.py)
 
 The Dimregions Job is responsible for creating and maintaining a Delta table called dimregions, which stores the distinct regions that the data may present. 
 
@@ -97,7 +117,7 @@ By creating a Delta table for the distinct regions in the data, we can easily an
 | cdregion | Unique code for each region record|
 | region | Descriptive name of the region |
 
-### DimDataSource Job
+### [DimDataSource Job](scripts/glue/dimdatasources.py)
 
 Similar to the DimRegions job, this job reads records from the raw layer and stores them in a Delta table called DimDataSource. This table is responsible for storing the distinct data sources that the data can present, meaning it is an incremental update process where, when there is a new data source, an insert is made, and when it is an existing one, the record is discarded. The job ensures that there is only one record for each data source in the table.
 
@@ -107,7 +127,7 @@ Similar to the DimRegions job, this job reads records from the raw layer and sto
 | cddatasource | Unique code for each datasource record|
 | datasource | Descriptive name of the datasource |
 
-### Facttrips Job
+### [Facttrips Job](scripts/glue/facttrips.py)
 
 This process reads data from the raw layer and inserts it into the delta table "facttrips", which stores consolidated information about trips, grouped by region, data source, and datetime (considering only the hour of the day). Thus, it generates a quantity of trips performed at the same hour of the day, with the same data source, for the same region.
 
@@ -122,9 +142,7 @@ Although fact tables are not commonly incremental updates but rather appends, in
 | count_trips | Number of the trips made at the same hour of the day, with the same data source, for the same region |
 
 It is worth noting that the final view of the fact table does not include the coordinates fields, as they do not add any value to the final result, and can even impair performance when extracting data. However, if the data science team or any other team needs to use this information, they can access it in the raw layer.
-## Authors
-- Geovani Leitão - gLeitao
 
-## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Workflow
+![plot](img/final_infra.png)
