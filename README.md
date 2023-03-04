@@ -19,8 +19,8 @@ The AWS CLI is a command-line tool that allows you to interact with AWS services
  - https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 ### Environment Variables
 
-You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
-- https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys
+You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. If you don't have them, please follow the instructions from the website:
+- https://www.schrodinger.com/kb/1842
 
 ### Python
 
