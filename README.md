@@ -90,6 +90,7 @@ By creating a Delta table for the distinct regions in the data, we can easily an
 
 #### Schema
 | Column Name | Description |
+| ------ | ------ |
 | cdregion | Unique code for each region record|
 | region | Descriptive name of the region |
 
@@ -99,6 +100,7 @@ Similar to the DimRegions job, this job reads records from the raw layer and sto
 
 #### Schema
 | Column Name | Description |
+| ------ | ------ |
 | cddatasource | Unique code for each datasource record|
 | datasource | Descriptive name of the datasource |
 
@@ -110,6 +112,7 @@ Although fact tables are not commonly incremental updates but rather appends, in
 
 #### Schema
 | Column Name | Description |
+| ------ | ------ |
 | cddatasource | Unique code for each datasource record|
 | datasource | Descriptive name of the datasource |
 | datetime | Date of the trip (considering only the hour of the day) |
