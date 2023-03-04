@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+infra/.terraform.lock.hcl
+infra/.terraform/terraform.tfstate
+infra/.terraform/providers/registry.terraform.io/hashicorp/aws/4.56.0/linux_amd64/terraform-provider-aws_v4.56.0_x5
