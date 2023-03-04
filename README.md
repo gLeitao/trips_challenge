@@ -184,6 +184,7 @@ ORDER BY reg.region, week_start_date;
 ```
 
 Sample of retrive data
+
 ![plot](img/trips_avg_week.png)
 
 ### [Latest Datasource](scripts/redshift/sql/latest_datasource.sql)
@@ -223,6 +224,7 @@ limit
 ```
 
 Sample of retrive data
+
 ![plot](img/latest_datasource.png)
 
 ### [Cheap Mobile](scripts/redshift/sql/cheap_mobile.sql)
