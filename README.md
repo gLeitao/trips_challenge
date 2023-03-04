@@ -46,7 +46,7 @@ pip install \
 
 To run the AWS infrastructure, go to the infra folder and run the following commands:
 
-`This step is only necessary if you want to set up the entire infrastructure. Otherwise, you can skip to the item  **Running ETL.** ` 
+`This step is only necessary if you want to set up the entire infrastructure. Otherwise, you can skip to the item  Running ETL.` 
 
 ```terraform
 terraform init
@@ -77,6 +77,8 @@ By implementing this modeling strategy, was aimed to ensure that the data is str
 
 
 ### Move Raw
+
+[a relative link](scripts/glue/move_raw.py)
 
 The Move Raw process reads the CSV file that has been ingested into the data lake and is stored in the landing layer. It then infers the schema of the attributes in the file and converts the data to the Parquet format. Finally, it saves the transformed data in the raw layer of the data lake.
 
