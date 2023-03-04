@@ -155,3 +155,87 @@ Although fact tables are not commonly incremental updates but rather appends, in
 | count_trips | Number of the trips made at the same hour of the day, with the same data source, for the same region |
 
 It is worth noting that the final view of the fact table does not include the coordinates fields, as they do not add any value to the final result, and can even impair performance when extracting data. However, if the data science team or any other team needs to use this information, they can access it in the raw layer.
+
+## Monitoring
+
+In terms of load monitoring, a trips_load table was created to store the status of each step in the workflow, including start and end logs. This enables the creation of a dashboard that provides real-time load status updates. Since it also includes the time taken for each step, it can even be used for performance analysis over time.
+
+#### Schema
+| Column Name | Description |
+| ------ | ------ |
+| hashid | Unique code for each workflow |
+| datetime | timestemp of input status |
+| comments | Description of status |
+
+## Retriving data from tables
+
+### [Weekly Avarage Trips](scripts/redshift/sql/weekly_avg_trips.sql)
+
+The purpose of this query is to verify the average number of trips to a specific region during the week.
+
+```
+SELECT reg.region, 
+       trunc(date_trunc('week', trp.datetime)) AS week_start_date, 
+       AVG(trp.count_trips) AS weekly_avg_trips
+FROM trips.facttrips trp
+left join trips.dimregions reg on reg.cdregion = trp.cdregion
+GROUP BY reg.region, week_start_date
+ORDER BY reg.region, week_start_date;
+```
+
+Sample of retrive data
+![plot](img/trips_avg_week.png)
+
+### [Latest Datasource](scripts/redshift/sql/latest_datasource.sql)
+
+The purpose of this query is to retrive the latest datasource from two most commonly appearing regions.
+
+```
+with commun_regions as(
+  SELECT 
+    reg.cdregion, 
+    reg.region, 
+    count(*) as row_count 
+  FROM 
+    trips.facttrips trp 
+    left join trips.dimregions reg on reg.cdregion = trp.cdregion 
+  group by 
+    reg.cdregion, 
+    reg.region 
+  order by 
+    row_count desc 
+  limit 
+    2
+) 
+select 
+  dts.datasource, 
+  max(trp.datetime) as datetime 
+FROM 
+  trips.facttrips trp 
+  left join trips.dimdatasources dts on dts.cddatasource = trp.cddatasource 
+  inner join commun_regions cr on cr.cdregion = trp.cdregion 
+group by 
+  dts.datasource 
+order by 
+  datetime desc 
+limit 
+  1
+```
+
+Sample of retrive data
+![plot](img/latest_datasource.png)
+
+### [Cheap Mobile](scripts/redshift/sql/cheap_mobile.sql)
+
+The purpose of this query is to identify the regions where the cheap mobile has appeared.
+
+```
+select distinct reg.region
+FROM trips.facttrips trp
+left join trips.dimregions reg on reg.cdregion = trp.cdregion 
+left join trips.dimdatasources dts on dts.cddatasource = trp.cddatasource  and 
+                                      lower(dts.datasource) = 'cheap_mobile';
+```
+
+Sample of retrive data
+![plot](img/cheap_mobile.png)
