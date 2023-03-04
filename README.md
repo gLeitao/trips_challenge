@@ -13,6 +13,10 @@ In order to run this project, you will need to have the following installed and 
 Terraform is an infrastructure as code tool used to create the AWS architecture. To install it, please follow the instructions from the official website:
  - https://www.terraform.io/downloads.html
 
+### Create Access Key
+To use aws cli you have to create an Acess Key, if you do no9t have one, please follow the instruction on the oficial website:
+ - https://docs.aws.amazon.com/accounts/latest/reference/root-user-access-key.html
+
 ### AWS CLI
 
 The AWS CLI is a command-line tool that allows you to interact with AWS services. To install it, please follow the instructions from the official website:
