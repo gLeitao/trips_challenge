@@ -46,6 +46,8 @@ pip install \
 
 To run the AWS infrastructure, go to the infra folder and run the following commands:
 
+`This step is only necessary if you want to set up the entire infrastructure. Otherwise, you can skip to the item  **Running ETL.** ` 
+
 ```terraform
 terraform init
 terraform apply
@@ -57,7 +59,7 @@ To run the ETL process, go to the scripts/upload folder and execute the followin
 ```
 python upload_local_file_s3.py --path /path/file.csv
 ```
-`Remeber to replace /path/file.csv with the path to your CSV file. ` 
+`Remeber to replace /path/file.csv with the path to your CSV file.` 
 
 This process will upload the CSV to S3 and invoke the Step Function, the workflow orchestrator responsible for triggering the ETLs that process the data.
 
