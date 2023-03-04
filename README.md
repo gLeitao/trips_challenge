@@ -16,7 +16,7 @@ Terraform is an infrastructure as code tool used to create the AWS architecture.
 ### AWS CLI
 
 The AWS CLI is a command-line tool that allows you to interact with AWS services. To install it, please follow the instructions from the official website:
-insta
+ - https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 ### Environment Variables
 
 You will need to set your  `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` as environment variables. If you don't have them, you can create them by following the instructions from the AWS documentation:
