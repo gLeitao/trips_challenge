@@ -164,7 +164,7 @@ In terms of load monitoring, a trips_load table was created to store the status 
 | Column Name | Description |
 | ------ | ------ |
 | hashid | Unique code for each workflow |
-| datetime | timestemp of input status |
+| datetime | timestamp of input status |
 | comments | Description of status |
 
 ## Retriving data from tables
