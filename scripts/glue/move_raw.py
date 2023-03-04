@@ -71,3 +71,5 @@ try:
 except Exception as e:
     insert_status(f"Error when trying to salve data into Raw Layer: {e}")
     raise ValueError(f"Error when trying to salve data into Raw Layer: {e}")
+
+insert_status("RAW Layer runs successfully!")    

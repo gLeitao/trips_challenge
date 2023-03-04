@@ -61,10 +61,23 @@ python upload_local_file_s3.py --path /path/file.csv
 ```
 `Remeber to replace /path/file.csv with the path to your CSV file.` 
 
+## [Infrastructure](infra)
+
+The infrastructure for this project was developed using the Terraform tool, which allows for better management of resources and changes in the environment.
+
+The infrastructure of this project consists of creating resources in AWS such as the [S3 bucket](infra/s3.tf) trips-datalake, which is used to store the transformed data. Additionally, the glue-job-etl-scripts bucket was created to store the ETL scripts.
+
+A  [Redshift cluster](infra/redshift.tf) was also created, with database, user, and machine resource configurations set up for storing DW information after transformation. To complement the infrastructure, the [glue connection](infra/glue_conections.tf) resource was created, which allows the connection between the glue job and Redshift. In this specific case, some pre-existing network resources such as subnet and security groups were used.
+
+[Policies and roles](infra/iam.tf) were then created for both the glue job and Step Function, granting permissions to access internal AWS resources such as S3, CloudWatch, Secret Manager, and more.
+
+With these resources in place, the [glue jobs](infra/job_glue.tf) were created, which are responsible for running the data transformation scripts. In this component, it was necessary to configure resources and connections to meet the project's scenario.
+
+Finally, the [Step Function](infra/step_function.tf) was created, which is responsible for orchestrating the data pipeline workflow.
 
 ## Architecture
 
-The architecture is structured as follows: outside the AWS context, there is an application, in this case a Python script, which reads the source CSV file and uploads it to the AWS context, storing it in an S3 bucket in the landing layer. After finishing the upload of the CSV file to the S3 bucket, the application is responsible for triggering the Step Function, which orchestrates the workflow of the pipelines within the AWS context, firing the Glue jobs in the specified sequence in the workflow, which are responsible for reading, manipulating, transforming, and storing the data in the lake or in Redshift. Below you can see the overall project architecture.
+The architecture is structured as follows: outside the AWS context, there is an application, in this case a [Python script](scripts/upload/upload_local_file_s3.py), which reads the source CSV file and uploads it to the AWS context, storing it in an S3 bucket in the landing layer. After finishing the upload of the CSV file to the S3 bucket, the application is responsible for triggering the Step Function, which orchestrates the workflow of the pipelines within the AWS context, firing the Glue jobs in the specified sequence in the workflow, which are responsible for reading, manipulating, transforming, and storing the data in the lake or in Redshift. Below you can see the overall project architecture.
 
 
 ![plot](img/final_infra.png)

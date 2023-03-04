@@ -21,33 +21,31 @@ job.commit()
 
 spark.conf.set("spark.sql.sources.partitionOverwriteMode", "dynamic")
 
-
-def insert_status(comments):
+def insert_redshift(df_insert, table, method):
     try:
-        df_control = spark.createDataFrame(
-            [(args["hashid"], datetime.now(), comments)],
-            ["hashid", "datetime", "comments"],
-        )
-
-        print(df_control.show())
-
         client = boto3.client("secretsmanager", region_name="us-east-2")
         get_secret_value_response = client.get_secret_value(SecretId="dev/trips-db")
         secret = json.loads(get_secret_value_response["SecretString"])
-
+    
         (
-            df_control.write.format("jdbc")
+            df_insert.write.format("jdbc")
             .option("url", secret.get("host"))
-            .option("dbtable", "control.trips_load")
+            .option("dbtable", table)
             .option("user", secret.get("username"))
             .option("password", secret.get("password"))
-            .mode("append")
+            .mode(method)
             .save()
         )
     except Exception as e:
-        raise ValueError(
-            f"Error when trying to salve data into data control process: {e}"
-        )
+        raise ValueError("Error when trying to salve data into redshift")
+
+def insert_status(comments): 
+    df_control = spark.createDataFrame(
+        [(args["hashid"], datetime.now(), comments)],
+        ["hashid", "datetime", "comments"],
+    )
+    
+    insert_redshift(df_control, "control.trips_load", "append")
 
 
 insert_status("Running Fact Layer")
@@ -86,12 +84,14 @@ df_fact_trips = spark.sql(sql_factrips)
 
 try:
     df_fact_trips_table = delta.tables.DeltaTable.forPath(
-        spark, "s3://trips-datalake/business/trips/factrips"
+        spark, "s3://trips-datalake/business/trips/facttrips"
     )
 except Exception as e:
     df_fact_trips.write.format("delta").save(
-        "s3://trips-datalake/business/trips/factrips"
+        "s3://trips-datalake/business/trips/facttrips"
     )
+    insert_redshift(df_fact_trips, "trips.facttrips", "overwrite")
+    insert_status("Facttrips Layer runs successfully!")
     os._exit(0)
 
 (
@@ -105,21 +105,6 @@ except Exception as e:
     .execute()
 )
 
-try:
-    client = boto3.client("secretsmanager", region_name="us-east-2")
-    get_secret_value_response = client.get_secret_value(SecretId="dev/trips-db")
-    secret = json.loads(get_secret_value_response["SecretString"])
+insert_redshift(df_fact_trips_table.toDF(), "trips.facttrips", "overwrite")
 
-    (
-        df_fact_trips_table.toDF()
-        .write.format("jdbc")
-        .option("url", secret.get("host"))
-        .option("dbtable", "trips.facttrips")
-        .option("user", secret.get("username"))
-        .option("password", secret.get("password"))
-        .mode("overwrite")
-        .save()
-    )
-except Exception as e:
-    insert_status("Error when trying to salve data into redshift at Fact Layer")
-    raise ValueError(f"Error when trying to salve data into redshift: {e}")
+insert_status("Fact Layer runs successfully!")
