@@ -238,4 +238,5 @@ left join trips.dimdatasources dts on dts.cddatasource = trp.cddatasource  and
 ```
 
 Sample of retrive data
+
 ![plot](img/cheap_mobile.png)
