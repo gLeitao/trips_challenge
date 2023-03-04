@@ -76,9 +76,7 @@ In the star schema, one central fact table is connected to a set of dimension ta
 By implementing this modeling strategy, was aimed to ensure that the data is structured in a way that facilitates efficient querying and analysis, and enables us to gain valuable insights from the data.
 
 
-### Move Raw
-
-[a relative link](scripts/glue/move_raw.py)
+### [Move Raw](scripts/glue/move_raw.py)
 
 The Move Raw process reads the CSV file that has been ingested into the data lake and is stored in the landing layer. It then infers the schema of the attributes in the file and converts the data to the Parquet format. Finally, it saves the transformed data in the raw layer of the data lake.
 
@@ -91,6 +89,7 @@ The Dimregions Job is responsible for creating and maintaining a Delta table cal
 The job reads the Parquet data from the raw layer of the data lake and applies an incremental update process to the dimregions table. If a new region is identified in the data, it is inserted into the table, while existing records are discarded.
 
 By creating a Delta table for the distinct regions in the data, we can easily and efficiently query and analyze the data. Additionally, by using an incremental update process, we can keep the dimregions table up to date with any new regions that may be added to the data in the future.
+
 
 #### Schema
 | Column Name | Description |
