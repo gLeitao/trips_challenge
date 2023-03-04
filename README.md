@@ -83,7 +83,7 @@ It is worth noting that each job is also responsible for feeding the trips_load 
 
 Below you can see the overall of Step Function Workflow.
 
-![plot](img/img/stepfunction.png)
+![plot](img/stepfunction.png)
 
 ## Scope of data
 
@@ -142,7 +142,3 @@ Although fact tables are not commonly incremental updates but rather appends, in
 | count_trips | Number of the trips made at the same hour of the day, with the same data source, for the same region |
 
 It is worth noting that the final view of the fact table does not include the coordinates fields, as they do not add any value to the final result, and can even impair performance when extracting data. However, if the data science team or any other team needs to use this information, they can access it in the raw layer.
-
-
-## Workflow
-![plot](img/final_infra.png)
