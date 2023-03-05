@@ -2,7 +2,7 @@
 # Job Glue Script bucket
 ################################################
 resource "aws_s3_bucket" "s3_glue_job_bucket" {
-  bucket = "glue-job-etl-scripts"
+  bucket = var.glue_bucket_name
 }
 
 resource "aws_s3_bucket_acl" "s3_glue_job_bucket_acl" {
@@ -48,7 +48,7 @@ resource "aws_s3_object" "upload-glue-script-facttrips" {
 ################################################
 
 resource "aws_s3_bucket" "s3_datalake_bucket" {
-  bucket = "trips-datalake"
+  bucket = var.datalake_bucket_name
 }
 
 resource "aws_s3_bucket_acl" "s3_datalake_bucket_acl" {
