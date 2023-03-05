@@ -48,15 +48,25 @@ pip install \
 
 ## Running the AWS Infrastructure
 
-To run the AWS infrastructure, go to the infra folder and run the following commands:
+### Pre-deployment instructions:
 
-`This step is only necessary if you want to set up the entire infrastructure. Otherwise, you can skip to the item  Running ETL.` 
+Before deploying the infrastructure, please follow these instructions:
+- Fill in the values for the variables in the [variables.tf](infra/variables.tf) file;
+- Pay extra attention to the variables related to the network, as this project considers the default VPC from AWS. Make sure to use the corresponding information from your own account, which can be found at https://us-east-2.console.aws.amazon.com/vpc
+
+To run the AWS infrastructure, go to the infra folder and run the following commands:
 
 ```terraform
 terraform init
 terraform apply
 ```
 This will create an the required infra to run this project.
+
+### Post-Deployment Instructions:
+After successfully deploying the infrastructure, please follow the below instructions:
+ - Create a secret with the name dev/trips-db in the Secret Manager containing the access information for Redshift (username, password, host). The information can be found at https://us-east-2.console.aws.amazon.com/secretsmanager/listsecrets.
+ - Create endpoints for the Redshift and Secret Manager resources that point to the default AWS VPC. This will enable the Glue scripts to access these resources, otherwise, it will result in errors while running the job. The endpoints can be created at https://us-east-2.console.aws.amazon.com/vpc/#Endpoints.
+ - Create the schemas and tables related to the project, which can be found in the folder [scripts/redshift/ddl](scripts/redshift/ddl). You can use the query editor v2 at this link https://us-east-2.console.aws.amazon.com/sqlworkbench/home?region=us-east-2#/client, or any other SQL client to access the Redshift cluster.
 
 ## Running the ETL
 To run the ETL process, go to the scripts/upload folder and execute the following command:

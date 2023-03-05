@@ -1,3 +1,6 @@
+################################################
+# Raw Job
+################################################
 resource "aws_glue_job" "raw_job" {
   name = "raw_job"
   role_arn = aws_iam_role.glue_role.arn
@@ -37,9 +40,9 @@ resource "aws_glue_job" "raw_job" {
 }
 
 
-############################################
-
-
+################################################
+# Dimregions Job
+################################################
 resource "aws_glue_job" "dimregions_job" {
   name = "dimregions_job"
   role_arn = aws_iam_role.glue_role.arn
@@ -79,9 +82,9 @@ resource "aws_glue_job" "dimregions_job" {
 }
 
 
-############################################
-
-
+################################################
+# Dimdatasources Job
+################################################
 resource "aws_glue_job" "dimdatasources_job" {
   name = "dimdatasources_job"
   role_arn = aws_iam_role.glue_role.arn
@@ -120,9 +123,9 @@ resource "aws_glue_job" "dimdatasources_job" {
   
 }
 
-############################################
-
-
+################################################
+# Facttrips Job
+################################################
 resource "aws_glue_job" "facttrips_job" {
   name = "facttrips_job"
   role_arn = aws_iam_role.glue_role.arn
