@@ -256,3 +256,10 @@ left join trips.dimdatasources dts on dts.cddatasource = trp.cddatasource  and
 Sample of retrive data
 
 ![plot](img/cheap_mobile.png)
+
+
+## Overview
+
+In the video below, you will get a comprehensive overview of the project, including its goals, features, and functionalities. You will also learn how to navigate through the project and get started with using it. We highly recommend that you watch this video before getting started with the project, as it will give you a solid understanding of what to expect and how to proceed.
+
+https://www.youtube.com/watch?v=Qj64u5I5oVo
