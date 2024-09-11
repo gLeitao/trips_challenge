@@ -1,6 +1,6 @@
 # Trips Challenge Project
 
-This is the Trips Challenge project, a solution to a coding challenge provided by Jobsity.
+This project deploys an AWS-based data pipeline using Terraform to manage trip information efficiently. It automates the ingestion, transformation, and storage of data in S3 and Redshift, orchestrated by AWS Step Functions. The pipeline provides insights into trip data, including weekly averages and top locations visited.
 
 
 
